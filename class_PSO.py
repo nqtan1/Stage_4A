@@ -29,7 +29,7 @@ def iterMin (tab):
 ============================================================================================
 '''
 class PSO:
-    def __init__(self, c1=2, c2=2, w_min=0.4, w_max=0.95, nbElements=10, MaxIter=50, nbPar=200,nbPSO=30):
+    def __init__(self, c1=2, c2=2, w_min=0.4, w_max=0.95, nbElements=10, MaxIter=50, nbPar=200,nbPSO=30,precisionFrequence=4,precisionSolution=2):
         self.c1 = c1    # Cognitive acceleration
         self.c2 = c2    # Social acceleration 
         # Linearly decreasing inertia weight parameters
@@ -44,7 +44,10 @@ class PSO:
         self.BoundaryMax = 1
         self.Bound_min = self.BoundaryMin * np.ones((self.nbPar, self.nbElements))
         self.Bound_max = self.BoundaryMax * np.ones((self.nbPar, self.nbElements))
-        self.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPar)
+        # Nombre de chiffres à arrondir
+        self.precisionFrequence = precisionFrequence # pour la fréquence
+        self.precisionSolution = precisionSolution   # pour la solution
+        self.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPar,precisionSolution,precisionFrequence)
             
     def __info__(self):
         info_str = "PSO object:\n"
@@ -55,6 +58,8 @@ class PSO:
         info_str += f"nbElements: {self.nbElements}\n"
         info_str += f"MaxIter: {self.MaxIter}\n"
         info_str += f"nbPar: {self.nbPar}\n"
+        info_str += f"Précision de la fréquence: {self.precisionFrequence}\n"
+        info_str += f"Précision de la solution : {self.precisionSolution}\n"
         return info_str
 
     # Renvoie le nombre de défauts
@@ -136,7 +141,7 @@ class PSO:
             
             # Retourner le nombre de défauts
             defauts = self.getNbDefauts(population[iterMin(fitGlobal)])
-            itMin = iterMin(fitGlobal)
+            itMin = iterMin(fitGlobal) # Emplacement de la valeur minimal
             #print("Iter: " +str(itMin))
                         
         return itMin, defauts, population, fitGlobal
@@ -172,9 +177,17 @@ class PSO:
      # Mettre à jour la valeur de Nbre de PSO  
     def update_nbPSO(self, nbPSO):
         self.nbPSO = nbPSO
+
+    # Mettre à jour la précision de la solution 
+    def update_precisionSolution(self, precisionSolution):
+        self.precisionSolution = precisionSolution
+
+    # Mettre à jour la précision de la fréquence
+    def update_precisionFrequence(self, precisionFrequence):
+        self.precisionFrequence = precisionFrequence
     
     # Mettre à jour une ou plusieurs propriétés à la fois avec un seul appel de fonction
-    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPar=None, nbPSO=None):
+    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPar=None, nbPSO=None,precisionSolution=None,precisionFrequence=None):
         if c1 is not None:
             self.update_c1(c1)
         if c2 is not None:
@@ -191,3 +204,7 @@ class PSO:
             self.update_nbPar(nbPar)
         if nbPSO is not None:
             self.update_nbPSO(nbPSO)
+        if precisionFrequence is not None:
+            self.update_precisionFrequence(precisionFrequence)
+        if precisionSolution is not None:
+            self.update_precisionSolution(precisionSolution)

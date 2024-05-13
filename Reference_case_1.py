@@ -60,6 +60,3 @@ def reference_case_1(nb_elements, nb_freq, precision, instance):
     freq=freq[indices_nonzero]
 
     return x, freq
-
-
-

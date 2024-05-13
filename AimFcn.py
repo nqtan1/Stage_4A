@@ -84,7 +84,3 @@ def aim_fcn(x, Fref):
     error4_2 = (1 / nb_capteur) * np.sum(np.min(f_new, axis=1) / np.max(f_new, axis=1))
     err = -1 / 2 * (error4_1 + error4_2)
     return err
-
-
-
-
