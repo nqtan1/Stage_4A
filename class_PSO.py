@@ -29,7 +29,7 @@ def iterMin (tab):
 ============================================================================================
 '''
 class PSO:
-    def __init__(self, c1=2, c2=2, w_min=0.4, w_max=0.95, nbElements=10, MaxIter=50, nbPar=200,nbPSO=30,precisionFrequence=4,precisionSolution=2):
+    def __init__(self, c1=2, c2=2, w_min=0.4, w_max=0.95, nbElements=10, MaxIter=50, nbPSO=50, nbPar=200 ,precisionFrequence=4,precisionSolution=2):
         self.c1 = c1    # Cognitive acceleration
         self.c2 = c2    # Social acceleration 
         # Linearly decreasing inertia weight parameters
@@ -38,7 +38,7 @@ class PSO:
         self.nbElements = nbElements    # Nombre d'éléments
         self.MaxIter = MaxIter  # Nbre d'itération
         self.nbPar = nbPar   # Nbre de particules 
-        self.nbPSO = nbPSO
+        self.nbPSO = nbPSO   # Nbre de fois où la recherche a été effectuée
         # Définition des bornes min,max de chaque élément
         self.BoundaryMin = 0
         self.BoundaryMax = 1
@@ -47,10 +47,10 @@ class PSO:
         # Nombre de chiffres à arrondir
         self.precisionFrequence = precisionFrequence # pour la fréquence
         self.precisionSolution = precisionSolution   # pour la solution
-        self.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPar,precisionSolution,precisionFrequence)
+        self.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPSO, nbPar,precisionSolution,precisionFrequence)
             
     def __info__(self):
-        info_str = "PSO object:\n"
+        info_str = "PSO :\n"
         info_str += f"c1: {self.c1}\n"
         info_str += f"c2: {self.c2}\n"
         info_str += f"w_min: {self.w_min}\n"
@@ -58,13 +58,14 @@ class PSO:
         info_str += f"nbElements: {self.nbElements}\n"
         info_str += f"MaxIter: {self.MaxIter}\n"
         info_str += f"nbPar: {self.nbPar}\n"
+        info_str += f"NbPSO : {self.nbPSO}\n"
         info_str += f"Précision de la fréquence: {self.precisionFrequence}\n"
         info_str += f"Précision de la solution : {self.precisionSolution}\n"
         return info_str
 
     # Renvoie le nombre de défauts
     def getNbDefauts (self,tab):
-        threshold = 0.00001  # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
+        threshold = 0.000001  # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
         count = 0
         for item in tab:
             if abs(item) > threshold:  # Utiliser abs() si vous souhaitez également prendre en compte les valeurs négatives
@@ -187,7 +188,7 @@ class PSO:
         self.precisionFrequence = precisionFrequence
     
     # Mettre à jour une ou plusieurs propriétés à la fois avec un seul appel de fonction
-    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPar=None, nbPSO=None,precisionSolution=None,precisionFrequence=None):
+    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPSO=None, nbPar=None, precisionSolution=None,precisionFrequence=None):
         if c1 is not None:
             self.update_c1(c1)
         if c2 is not None:

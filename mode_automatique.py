@@ -2,6 +2,7 @@ from class_data_PSO import dataPSO,listDataPSO
 from class_PSO import PSO
 import numpy as np
 import warnings
+import time 
 
 # Désactiver temporairement les avertissements RuntimeWarning
 warnings.filterwarnings("ignore", category=RuntimeWarning)
@@ -37,7 +38,7 @@ print("=    Les paramètres par défaut de PSO sont:                            
 print("=        1. Coefficients cognitifs et sociaux : c1 = 2 et c2 = 2                           =")
 print("=        2. Nombre de particules  : nbPar =  200                                           =")
 print("=        3. Nombre d'itérations maximum   : MaxIter =  50                                  =")
-print("=        4. Nombre de PSO  : nbPSO =  30                                                   =")
+print("=        4. Nombre de PSO  : nbPSO =  100                                                  =")
 print("=        5. Domaine de variation du poids inertiel   : w_min = 0.4 et w_max = 0.95         =")
 print("=        6. Nombre d'éléments  : nbElements =  10                                          =")
 print("============================================================================================")
@@ -88,6 +89,8 @@ print("=========================================================================
 
 '''Pour Linux, Obtenir le chemin absolu d'un fichier: readlink -f 'nom_fichier' '''
 
+
+
 inputData = input("Lien d'accès à l'ensemble de données d'entrée: ")
 outputData = input("Lien d'accès pour écrire les données de résultat: ")
 
@@ -100,12 +103,15 @@ data.read_from_txt(inputData)
 
 for i in range(data.nbCas()):
     print("============================================================================================")
-    print("La série frequence no." + str(i) +"  :")
+    print("La série fréquence no." + str(i) +"  :")
     print(np.array(data.data[i].tabFrequences))
+    start_time = time.time()
     iterMin, defauts , population , fit = methode.enable_PSO(np.array(data.data[i].tabFrequences))
+    end_time = time.time()
     print("La meilleure solution: ")
     print(population[iterMin])
-    solution = dataPSO(nbDefauts=defauts,tabFrequences=np.array(data.data[i].tabFrequences),tabSolutions=np.array(population[iterMin]),precisionFrequence=3,precisionSolution=2)
+    solution = dataPSO(nbDefauts=defauts,tabFrequences=np.array(data.data[i].tabFrequences),tabSolutions=np.array(population[iterMin]),precisionFrequence=4,precisionSolution=2)
     solution.write_to_txt(filePath=outputData)
+    print("Exécution du programme: " + str(end_time-start_time))
 
 print("===================================== C'est fini! ===========================================")
