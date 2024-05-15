@@ -50,7 +50,7 @@ class PSO:
         self.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPSO, nbPar,precisionSolution,precisionFrequence)
             
     def __info__(self):
-        info_str = "PSO :\n"
+        info_str = "Paramètres du PSO :\n"
         info_str += f"c1: {self.c1}\n"
         info_str += f"c2: {self.c2}\n"
         info_str += f"w_min: {self.w_min}\n"
@@ -188,7 +188,7 @@ class PSO:
         self.precisionFrequence = precisionFrequence
     
     # Mettre à jour une ou plusieurs propriétés à la fois avec un seul appel de fonction
-    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPSO=None, nbPar=None, precisionSolution=None,precisionFrequence=None):
+    def update_params(self, c1=None, c2=None, w_min=None, w_max=None, nbElements=None, MaxIter=None, nbPSO=None, nbPar=None,precisionFrequence=None, precisionSolution=None):
         if c1 is not None:
             self.update_c1(c1)
         if c2 is not None:
