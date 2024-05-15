@@ -47,6 +47,9 @@ print("-> Ou 7 pour modifiez-les tous en même temps selon la syntaxe suivante: 
 print("-> N'appuyez pas sur 0 pour continuer et utiliser les valeurs par défaut")
 
 while True:
+
+    print(methode.__info__())
+
     choice = int(input("Entrez votre choix: "))
 
     if choice == 0:
@@ -64,7 +67,7 @@ while True:
             methode.update_c2(value_c2)
         elif choice == 2:
             value_nPar = float(input(f"Entrez la nouvelle valeur pour le nombre de particules : "))
-            methode.update_c2(value_nPar)
+            methode.update_nbPar(value_nPar)
         elif choice == 3:
             value_maxIter = float(input(f"Entrez la nouvelle valeur pour le nombre d'itérations maximum : "))
             methode.update_MaxIter(int(value_maxIter))
@@ -74,8 +77,8 @@ while True:
         elif choice == 5:
             value_w_min = float(input(f"Entrez la nouvelle valeur pour w_min : "))
             value_w_max = float(input(f"Entrez la nouvelle valeur pour w_max : "))
-            methode.update_w_max(value_w_min)
-            methode.update_w_min(value_w_max)
+            methode.update_w_min(value_w_min)
+            methode.update_w_max(value_w_max)
         elif choice == 6:
             value_nbElements = float(input(f"Entrez la nouvelle valeur pour le nombre d'éléments  : "))
             methode.update_nbElements(int(value_nbElements))
@@ -88,8 +91,6 @@ print("=                                   Lien de données                     
 print("============================================================================================")
 
 '''Pour Linux, Obtenir le chemin absolu d'un fichier: readlink -f 'nom_fichier' '''
-
-
 
 inputData = input("Lien d'accès à l'ensemble de données d'entrée: ")
 outputData = input("Lien d'accès pour écrire les données de résultat: ")
