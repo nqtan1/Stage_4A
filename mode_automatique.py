@@ -15,15 +15,18 @@ def get_pso_parameters_from_input(input_string):
         key, value = param.split('=') 
         params_dict[key.strip()] = value.strip() 
         
-    c1 = float(params_dict["c1"])
-    c2 = float(params_dict["c2"])
-    w_min = float(params_dict["w_min"])
-    w_max = float(params_dict["w_max"])
-    nbElements = int(params_dict["nb_elements"])
-    MaxIter = int(params_dict["nb_frequences"])
+    c1 = int(params_dict["c1"])
+    c2 = int(params_dict["c2"])
+    w_min = int(params_dict["w_min"])
+    w_max = int(params_dict["w_max"])
+    nbElements = int(params_dict["nbElements"])
+    MaxIter = int(params_dict["MaxIter"])
     nbPar = int(params_dict["nbPar"])
+    nbPSO = int(params_dict["nbPSO"])
+    precisionFrequence = int(params_dict["precisionFrequence"])
+    precisionSolution = int(params_dict["precisionSolution"])
 
-    return c1, c2, w_min, w_max, nbElements, MaxIter, nbPar
+    return c1, c2, w_min, w_max, nbElements, MaxIter, nbPar, nbPSO, precisionFrequence, precisionSolution
 
 # Initialization
 methode = PSO()
@@ -41,10 +44,12 @@ print("=        3. Nombre d'itérations maximum   : MaxIter =  50               
 print("=        4. Nombre de PSO  : nbPSO =  100                                                  =")
 print("=        5. Domaine de variation du poids inertiel   : w_min = 0.4 et w_max = 0.95         =")
 print("=        6. Nombre d'éléments  : nbElements =  10                                          =")
+print("=        7. Précision de la fréquence et la solution  : precisionFrequence =  4            =")
+print("=                                                       precisionSolution = 2              =")
 print("============================================================================================")
-print("-> Entrez les valeurs de 1 à 6 pour modifier les paramètres PSO")
-print("-> Ou 7 pour modifiez-les tous en même temps selon la syntaxe suivante: c1=2,c2=2,nbPar=100,MaxIter=100,nbPSO=100,w_min=0,w_max=1,nbElements=20")
-print("-> N'appuyez pas sur 0 pour continuer et utiliser les valeurs par défaut")
+print("-> Entrez les valeurs de 1 à 7 pour modifier les paramètres PSO")
+print("-> Ou 8 pour modifiez-les tous en même temps selon la syntaxe suivante: c1=2,c2=2,nbPar=100,MaxIter=100,nbPSO=100,w_min=0,w_max=1,nbElements=20,precisionFrequence=4,precisionSolution=2")
+print("-> N'appuyez pas sur 0 pour continuer et utiliser les valeurs par défaut (Si rien n'a changé avant)")
 
 while True:
 
@@ -52,12 +57,12 @@ while True:
 
     choice = int(input("Entrez votre choix: "))
 
-    if choice == 0:
+    if choice == 0 or choice == 9 :
         break
-    elif choice == 7:
+    elif choice == 8:
         input_string = input("Entrez la syntaxe pour modifier tous les paramètres en même temps: ")
-        c1, c2, w_min, w_max, nbElements, MaxIter, nbPar = get_pso_parameters_from_input(input_string)
-        methode.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPar)
+        c1, c2, w_min, w_max, nbElements, MaxIter, nbPar,nbPSO,precisionFrequence, precisionSolution = get_pso_parameters_from_input(input_string)
+        methode.update_params(c1, c2, w_min, w_max, nbElements, MaxIter, nbPSO , nbPar, precisionFrequence, precisionSolution)
         print("Paramètres PSO mis à jour avec succès!")
     elif choice in range(1, 7):
         if choice == 1:
@@ -82,9 +87,14 @@ while True:
         elif choice == 6:
             value_nbElements = float(input(f"Entrez la nouvelle valeur pour le nombre d'éléments  : "))
             methode.update_nbElements(int(value_nbElements))
+        elif choice == 7:
+            value_precision_frequence = float(input(f"Entrez la précision de la fréquence : "))
+            value_precision_solution = float(input(f"Entrez la précision de la solution : "))
+            methode.update_precisionFrequence(value_precision_frequence)
+            methode.update_precisionSolution(value_precision_solution)
         print(f"Paramètre mis à jour avec succès!")
     else:
-        print("Choix invalide. Veuillez entrer une valeur de 0 à 7!")
+        print("Choix invalide. Veuillez entrer une valeur de 0 à 8!")
         
 print("============================================================================================")
 print("=                                   Lien de données                                        =")
