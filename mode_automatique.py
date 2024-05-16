@@ -15,10 +15,10 @@ def get_pso_parameters_from_input(input_string):
         key, value = param.split('=') 
         params_dict[key.strip()] = value.strip() 
         
-    c1 = int(params_dict["c1"])
-    c2 = int(params_dict["c2"])
-    w_min = int(params_dict["w_min"])
-    w_max = int(params_dict["w_max"])
+    c1 = float(params_dict["c1"])
+    c2 = float(params_dict["c2"])
+    w_min = float(params_dict["w_min"])
+    w_max = float(params_dict["w_max"])
     nbElements = int(params_dict["nbElements"])
     MaxIter = int(params_dict["MaxIter"])
     nbPar = int(params_dict["nbPar"])
@@ -53,7 +53,7 @@ print("-> N'appuyez pas sur 0 pour continuer et utiliser les valeurs par défaut
 
 while True:
 
-    print(methode.__info__())
+    print(methode.__info__()) # Voir les changements de paramètres après chaque opération
 
     choice = int(input("Entrez votre choix: "))
 
@@ -74,10 +74,10 @@ while True:
             value_nPar = float(input(f"Entrez la nouvelle valeur pour le nombre de particules : "))
             methode.update_nbPar(value_nPar)
         elif choice == 3:
-            value_maxIter = float(input(f"Entrez la nouvelle valeur pour le nombre d'itérations maximum : "))
+            value_maxIter = int(input(f"Entrez la nouvelle valeur pour le nombre d'itérations maximum : "))
             methode.update_MaxIter(int(value_maxIter))
         elif choice == 4:
-            value_nbPSO = float(input(f"Entrez la nouvelle valeur pour le nombre PSO : "))
+            value_nbPSO = int(input(f"Entrez la nouvelle valeur pour le nombre PSO : "))
             methode.update_nbPSO(value_nbPSO)
         elif choice == 5:
             value_w_min = float(input(f"Entrez la nouvelle valeur pour w_min : "))
@@ -85,11 +85,11 @@ while True:
             methode.update_w_min(value_w_min)
             methode.update_w_max(value_w_max)
         elif choice == 6:
-            value_nbElements = float(input(f"Entrez la nouvelle valeur pour le nombre d'éléments  : "))
-            methode.update_nbElements(int(value_nbElements))
+            value_nbElements = int(input(f"Entrez la nouvelle valeur pour le nombre d'éléments  : "))
+            methode.update_nbElements(value_nbElements)
         elif choice == 7:
-            value_precision_frequence = float(input(f"Entrez la précision de la fréquence : "))
-            value_precision_solution = float(input(f"Entrez la précision de la solution : "))
+            value_precision_frequence = int(input(f"Entrez la précision de la fréquence : "))
+            value_precision_solution = int(input(f"Entrez la précision de la solution : "))
             methode.update_precisionFrequence(value_precision_frequence)
             methode.update_precisionSolution(value_precision_solution)
         print(f"Paramètre mis à jour avec succès!")
@@ -107,7 +107,7 @@ outputData = input("Lien d'accès pour écrire les données de résultat: ")
 
 
 print("============================================================================================")
-print("=                                   Lancer le programme                                    =")
+print("=                                   Exécuter le programme                                  =")
 print("============================================================================================")
 
 data.read_from_txt(inputData)
@@ -123,6 +123,6 @@ for i in range(data.nbCas()):
     print(population[iterMin])
     solution = dataPSO(nbDefauts=defauts,tabFrequences=np.array(data.data[i].tabFrequences),tabSolutions=np.array(population[iterMin]),precisionFrequence=4,precisionSolution=2)
     solution.write_to_txt(filePath=outputData)
-    print("Exécution du programme: " + str(end_time-start_time))
+    print("Durée d'exécution du programme: " + str(end_time-start_time))
 
 print("===================================== C'est fini! ===========================================")
