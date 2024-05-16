@@ -65,7 +65,7 @@ class PSO:
 
     # Renvoie le nombre de défauts
     def getNbDefauts (self,tab):
-        threshold = 0.000001  # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
+        threshold = 0.0001  # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
         count = 0
         for item in tab:
             if abs(item) > threshold:  # Utiliser abs() si vous souhaitez également prendre en compte les valeurs négatives
