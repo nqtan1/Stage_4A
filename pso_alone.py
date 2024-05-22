@@ -16,14 +16,16 @@ def iterMin (tab):
 
  # Renvoie le nombre de défauts
 def getNbDefauts (tab,precisionSolution=4):
-    threshold = 0.01 ** precisionSolution  # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
+    # Définir un seuil pour déterminer si une valeur est considérée comme « différente de zéro »
+    threshold = 0.01 ** precisionSolution  
     count = 0
     for item in tab:
-        if abs(item) > threshold:  # Utiliser abs() si vous souhaitez également prendre en compte les valeurs négatives
+        # Utiliser abs() si vous souhaitez également prendre en compte les valeurs négatives
+        if abs(item) > threshold:  
             count += 1
     return count
 
-def pso_alone(Fref,c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbMaxPSO=50,precisionFrequence=4,precisionSolution=2,outputData=''):
+def pso_alone_manuel(Fref=[],nbFreq = 8,c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbMaxPSO=50,precisionFrequence=4,precisionSolution=2,outputData=''):
     # Définition des bornes min,max de chaque élément
     BoundaryMin = 0
     BoundaryMax = 1
@@ -34,9 +36,10 @@ def pso_alone(Fref,c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=20
     fitGlobal = np.zeros(nbMaxPSO)
 
     # Ensemble de valeurs après arrondi
-    Fref = np.array([round(freq, precisionFrequence) for freq in Fref])
-    #print("Série de fréquences: ")
-    #print(Fref)
+    Fref = np.array([round(freq, precisionFrequence) for freq in Fref[:nbFreq]])
+
+    #print("Série de fréquences no." + str(i) + ": ")
+    print(Fref)
 
     start_time = time.time()  
 
@@ -79,6 +82,8 @@ def pso_alone(Fref,c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=20
                         V[i, j] = np.sign(V[i, j]) * Vmax[j]
                     # Affectation de la nouvelle position de la particule
                     X[i, j] = X[i, j] + V[i, j]
+                    #print("Position " + str(i) + ": ")
+                    #print(X)
             
             L1_X = X > Bound_max
             X[L1_X == 1] = Bound_max[L1_X == 1]
@@ -112,15 +117,20 @@ def pso_alone(Fref,c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=20
 
     print("Meilleure solution: ")
     print(population[itMin])
+    print("Fitness Value: ")
+    print(fitGlobal.min())
     print("======================================================================")
 
-    solution = dataPSO(nbDefauts=defauts,tabFrequences=Fref,tabSolutions=np.array(population[itMin]),precisionFrequence=precisionFrequence,precisionSolution=precisionSolution)
-    solution.write_to_txt(filePath=outputData)
+    if outputData == '':
+        print("Le chemin du fichier de résultat est introuvable!")
+    else:
+        solution = dataPSO(nbDefauts=defauts,tabFrequences=Fref,tabSolutions=np.array(population[itMin]),precisionFrequence=precisionFrequence,precisionSolution=precisionSolution)
+        solution.write_to_txt(filePath=outputData)
     
     return itMin, running_time , population, fitGlobal
 
 
-def pso_alone(c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbMaxPSO=50,precisionFrequence=4,precisionSolution=2,intputData='',outputData=''):
+def pso_alone_automatique(c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbMaxPSO=50,nbFreq=8,precisionFrequence=4,precisionSolution=2,inputData='',outputData=''):
     # Définition des bornes min,max de chaque élément
     BoundaryMin = 0
     BoundaryMax = 1
@@ -132,13 +142,13 @@ def pso_alone(c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbM
 
     # 
     data = listDataPSO()
-    data.read_from_txt(intputData)
+    data.read_from_txt(inputData)
     
     for i in range(data.nbCas()):
-        Fref = np.array(data.data[i].tabFrequences)
+        Fref = np.array(data.data[i].tabFrequences[:nbFreq])
         # Ensemble de valeurs après arrondi
         Fref = np.array([round(freq, precisionFrequence) for freq in Fref])
-        print("Série de fréquences: ")
+        print("Série de fréquences no." + str(i) + ": ")
         print(Fref)
         start_time = time.time()  
 
@@ -181,6 +191,8 @@ def pso_alone(c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbM
                             V[i, j] = np.sign(V[i, j]) * Vmax[j]
                         # Affectation de la nouvelle position de la particule
                         X[i, j] = X[i, j] + V[i, j]
+                        #print("Position " + str(i) + ": ")
+                        #print(X)
                 
                 L1_X = X > Bound_max
                 X[L1_X == 1] = Bound_max[L1_X == 1]
@@ -218,3 +230,42 @@ def pso_alone(c1=2,c2=2,Maxiter=50,Wmax=0.95,Wmin=0.4,nbElements=10,Npar=200,nbM
 
         solution = dataPSO(nbDefauts=defauts,tabFrequences=Fref,tabSolutions=np.array(population[itMin]),precisionFrequence=precisionFrequence,precisionSolution=precisionSolution)
         solution.write_to_txt(filePath=outputData)
+
+# Function d’évaluation des performances des algorithmes.
+def eval_algo_manuel(solution_test=[], solution_predict=[], epsilon=0.05):
+    #Liste contient les valeurs de différence entre le résultat prédit et le résultat réel connu
+    tab_eval = []
+    for i in range(len(solution_test)):
+        tab_eval.append(solution_predict[i] - solution_test[i])
+
+    eval_sol = True
+    for value in tab_eval:
+        if abs(value) >= epsilon:
+            eval_sol = False
+            break
+    eval_result = {
+        "tab_eval": tab_eval,
+        "eval_sol": eval_sol
+    }
+
+    return eval_result
+
+# Function d’évaluation des performances des algorithmes.
+def eval_algo_automatique(solutions_test='',solutions_predict='',epsilon=0.05):
+    sol_test = listDataPSO()
+    sol_pred = listDataPSO()
+
+    sol_test.read_from_txt(solutions_test)
+    sol_pred.read_from_txt(solutions_predict)
+
+    #Liste contient les valeurs de différence entre le résultat prédit et le résultat réel connu
+    eval_result = []
+
+    for i in range(sol_test.nbCas()):
+        # Lirer la valeur du résultat à partir du fichier .txt
+        sol_test_val = np.array(sol_test.data[i].tabSolutions)
+        sol_pred_val = np.array(sol_pred.data[i].tabSolutions)
+
+        eval_result.append(eval_algo_manuel(sol_test_val,sol_pred_val,epsilon=epsilon))
+        
+    return eval_result
