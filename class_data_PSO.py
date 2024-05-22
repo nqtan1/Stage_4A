@@ -1,8 +1,10 @@
 import os
+from random import randint, gauss
 
 class dataPSO: 
-    def __init__(self,nbDefauts=-1,nbFrequences=0,nbElements=0,tabFrequences=[],tabSolutions=[],precisionFrequence=4,precisionSolution=2):
-        self.tabFrequences = tabFrequences
+    def __init__(self,nbDefauts=-1,nbFrequences=0,nbElements=0,tabFrequences=[],tabSolutions=[],precisionFrequence=4,precisionSolution=2,bruit=0):
+        self.bruit = bruit
+        self.tabFrequences = tabFrequences*(1+gauss(mu=0, sigma=self.bruit))
         self.tabSolutions = tabSolutions
         self.precisionFrequence = precisionFrequence
         self.precisionSolution = precisionSolution
@@ -40,7 +42,7 @@ class dataPSO:
             if ite != 0 : 
                 count = count + 1
         return count
-    
+
     def string_frequence_for_txt(self):
         text = ''
         for i in range(self.nbFrequences):
